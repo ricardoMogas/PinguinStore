@@ -1,0 +1,39 @@
+/* Estilos base para el Offcanvas */
+.offcanvas.offcanvas-start {
+  top: 68px; /* Valor predeterminado para pantallas más grandes */
+}
+.custom-backdrop {
+  background-color: rgba(0, 0, 0, 0); /* Fondo transparente */
+  opacity: 0; /* Opacidad del fondo */
+  pointer-events: none; /* Evita eventos de clic en el backdrop */
+  transition: opacity 0.3s ease-in-out; /* Transición suave de opacidad */
+}
+.list-group-item {
+  border: none; /* Elimina el borde */
+}
+.animated-item {
+  animation: fadeInUp 0.5s ease-in-out;
+}
+.custom-btn {
+  background-color: #FF3761;
+  color: black;
+  border: 1px solid black;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.customArrow-btn {
+  background-color: white;
+  border-radius: 100%;
+  border: none;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

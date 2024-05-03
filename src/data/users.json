@@ -1,0 +1,29 @@
+[
+    {
+      "name": "Juan",
+      "email": "juan@example.com",
+      "password": "1234",
+      "cart": [
+        {
+          "product_id": "607edf2b8dc2df56a46ea3d0",
+          "quantity": 2
+        },
+        {
+          "product_id": "607edf2b8dc2df56a46ea3d1",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "Ricardo",
+      "email": "Ricardo@example.com",
+      "password": "4321",
+      "cart": [
+        {
+          "product_id": "607edf2b8dc2df56a46ea3d2",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+  

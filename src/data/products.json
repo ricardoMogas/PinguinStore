@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Juan",
+        "email": "juan@example.com",
+        "bought_products": [
+            {
+                "product_id": "607edf2b8dc2df56a46ea3d0",
+                "quantity": 2
+            },
+            {
+                "product_id": "607edf2b8dc2df56a46ea3d1",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "name": "María",
+        "email": "maria@example.com",
+        "bought_products": [
+            {
+                "product_id": "607edf2b8dc2df56a46ea3d2",
+                "quantity": 1
+            }
+        ]
+    }
+]

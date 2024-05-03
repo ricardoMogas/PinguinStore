@@ -1,0 +1,39 @@
+{
+    "data": {
+      "products": [
+        {
+          "id": 1,
+          "name": "Producto 1",
+          "description": "Descripción del producto 1",
+          "price": 10,
+          "stock": 5,
+          "pathImage": "https://via.placeholder.com/150"
+        },
+        {
+          "id": 2,
+          "name": "Producto 2",
+          "description": "Descripción del producto 2",
+          "price": 20,
+          "stock": 10,
+          "pathImage": "https://via.placeholder.com/150"
+        },
+        {
+          "id": 3,
+          "name": "Producto 3",
+          "description": "Descripción del producto 3",
+          "price": 30,
+          "stock": 15,
+          "pathImage": "https://via.placeholder.com/150"
+        },
+        {
+          "id": 4,
+          "name": "Producto 3",
+          "description": "Descripción del producto 3",
+          "price": 30,
+          "stock": 15,
+          "pathImage": "https://via.placeholder.com/150"
+        }
+      ]
+    }
+  }
+  

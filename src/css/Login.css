@@ -1,0 +1,97 @@
+.fondo {
+  background-color: #00CFD9;
+  position: relative;
+  
+}
+.Icono {
+  position: absolute;
+  border-radius: 100%;
+  top: 80px;
+  
+}
+
+.form_container {
+  background: #030009;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+
+  width: 30%;
+  height: 57%;
+ 
+}
+.btn{
+    text-shadow: 3px 1px 2px #030009;
+}
+.form {
+  color: white;
+}
+
+.fondoSignUp {
+  background-size: cover;
+  background-image: url(../assets/stockStoreImage.jpg);
+  width: 30%;
+  height: 57%;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.Parrafo {
+  font-size: 30px;
+  font-family:impact;
+  color: #fe4d4d;
+  text-shadow: 2px -2px 1px #030009;
+}
+
+.container {
+  position: relative;
+  text-align: center;
+  align-items: center;
+}
+.SignUpContainer {
+  position: absolute;
+  top: 210px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  background-color: rgba(20, 20, 20, 0.5);
+  border-radius: 6px;
+  padding: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.btnLogin {
+  text-align: center;
+}
+
+/* RESPONSIVO */
+
+@media screen and (max-width: 780px) {
+  .form_container {
+    width: 65%;
+    height: 65%;
+    overflow: auto;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .form_container {
+   
+    overflow: auto;
+  }
+}
+@media screen and (max-width: 780px){
+    .fondoSignUp{
+        width: 65%;
+        height: 65%;
+        overflow: auto;
+    }
+}
+@media screen and (max-width: 1500px){
+  .fondoSignUp{
+      overflow: auto;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .Icono {
+    display: none;
+  }
+}
+

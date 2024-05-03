@@ -1,0 +1,120 @@
+.body {
+  background-color: #00CFD9;
+  position: relative;
+}
+.Icon {
+  position: absolute;
+  border-radius: 100%;
+  top: 80px;
+}
+
+.Registro {
+  background: #030009;
+  width: 30%;
+  height: 57%;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.form_Color {
+  color: white;
+}
+
+.SignUp {
+  background-image: url(../assets/SignUp.jfif);
+  width: 30%;
+  height: 57%;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+
+}
+.Titulo {
+  text-align: center;
+  align-items: center;
+}
+.Login {
+  font-size: 30px;
+  font-family: impact;
+  color: #f9da63;
+  text-shadow: 2px -2px 1px #030009;
+}
+
+.container_SignUp {
+  position: relative;
+  text-align: center;
+  align-items: center;
+}
+.SignUp_Container {
+  position: absolute;
+  top: 210px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: rgba(20, 20, 20, 0.5);
+  border-radius: 6px;
+  padding: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.btnLogin {
+  text-align: center;
+}
+
+.register_button {
+  border: none;
+  padding: 10px 20px; /* Ajusta el espaciado según sea necesario */
+  background-color: #ff0000; /* Color de fondo rojo */
+  color: #fff; /* Color del texto blanco */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al puntero al pasar el ratón */
+  font-size: 16px; /* Tamaño de fuente */
+  transition: background-color 0.3s ease; /* Efecto de transición para el color de fondo */
+  text-shadow: 3px 1px 2px #030009;
+  --bs-btn-font-weight: 400;  
+}
+.register_button:hover {
+  background-color: #ff3333; /* Cambia el color de fondo en el hover */
+}
+.modal-con-fondo-azul .modal-content {
+  text-align: center;
+  background-color: rgb(0, 0, 0);
+  color: white; /* Cambiar el color del texto a blanco */
+  /* Otros estilos personalizados si es necesario */
+}
+.modal-footer {
+  display: block;
+}
+.modal-header {
+  display: contents;
+}
+/* RESPONSIVO */
+
+@media screen and (max-width: 780px) {
+  .Registro {
+    width: 65%;
+    height: 65%;
+    overflow: auto;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .Registro {
+    overflow: auto;
+  }
+}
+@media screen and (max-width: 780px) {
+  .SignUp {
+    width: 65%;
+    height: 65%;
+    overflow: auto;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .SignUp {
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .Icon {
+    display: none;
+  }
+}

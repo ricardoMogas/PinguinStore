@@ -1,0 +1,78 @@
+.navbar {
+    background: #030009;
+  }
+  .Fondo {
+    background-color: #00CFD9;
+  /*   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+    
+  }
+  .container{
+  }
+  .btn-search{
+    right: 8px;
+    
+  }
+  
+  .btn{ 
+    border: 0;
+    text-shadow: none;
+  }
+
+  .footer {
+    background: #030009;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .footer .sci {
+    position: relative;
+    display: flex;
+  }
+  a {
+    color: #fff;
+  }
+  .footer ul{
+    right: 20px;
+  }
+  .footer li {
+    margin: 0 20px;
+  }
+  .copyrightText {
+    margin-top: 5px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+  }
+  .Modal1{
+    text-decoration: none;
+  }
+  .ContainerProduct{
+    background: #f0f0f0;
+  }
+  .CheckoutContainer{
+    background: #fff;
+    overflow: auto;
+  }
+  img {
+    width: 200px; /* Cambia este valor al tamaño deseado en píxeles */
+    height: 250px; /* Cambia este valor al tamaño deseado en píxeles */
+  }
+  .center-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .custom-spinner {
+    width: 80px; /* Ajusta el ancho según tus necesidades */
+    height: 80px; /* Ajusta la altura según tus necesidades */
+    border-width: 10px; /* Ajusta el grosor del borde según tus necesidades */
+  }
+  .center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 2vh
+  }

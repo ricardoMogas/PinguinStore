@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700&display=swap');
+
+body{
+    font-family: 'Archivo Narrow', sans-serif;
+}
+
+@font-face {
+    font-family: 'Archivo Narrow';
+    src: url(/ArchivoNarrow-VariableFont_wght.ttf);
+    font-weight: 400;
+}

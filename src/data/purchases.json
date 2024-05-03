@@ -1,0 +1,29 @@
+[
+    {
+      "user_id": "607edf2b8dc2df56a46ea3d3",
+      "products": [
+        {
+          "product_id": "607edf2b8dc2df56a46ea3d0",
+          "quantity": 2
+        },
+        {
+          "product_id": "607edf2b8dc2df56a46ea3d1",
+          "quantity": 1
+        }
+      ],
+      "total": 61.97,
+      "date": "2024-04-29T12:00:00.000Z"
+    },
+    {
+      "user_id": "607edf2b8dc2df56a46ea3d4",
+      "products": [
+        {
+          "product_id": "607edf2b8dc2df56a46ea3d2",
+          "quantity": 1
+        }
+      ],
+      "total": 49.99,
+      "date": "2024-04-28T12:00:00.000Z"
+    }
+  ]
+  

@@ -1,0 +1,44 @@
+.container {
+    padding: 20px;
+}
+.card {
+    margin-bottom: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.card-header-resume {
+    background-color: black;
+    color: white;
+}
+.card-custom {
+    
+}
+.custom-input {
+    background-color: #f0f0f0; /* Fondo gris para el input */
+    border: none; /* Quita el borde del input */
+    padding: 10px; /* Espacio interior del input */
+    border-radius: 25px;
+    width: 100%; /* Ancho del input para abarcar todo el Card */
+}
+.custom-input::placeholder {
+    color: #888; /* Color del texto de marcador de posición */
+}
+.button-order {
+    padding: 10px; /* Espaciado interno */
+    background-color: black; /* Color de fondo del botón */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 25px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 35px; /* Para alinear el icono y el texto horizontalmente */
+    align-items: center; /* Para centrar verticalmente el contenido */
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.button-order:hover {
+    background-color: #212529;
+}
+.img-custom {
+    width:auto; /* Cambia este valor al tamaño deseado en píxeles */
+    height: 150px; /* Cambia este valor al tamaño deseado en píxeles */
+}

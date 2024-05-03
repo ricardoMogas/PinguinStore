@@ -1,0 +1,38 @@
+/* Estilo del botón de compra */
+.button-buy {
+    padding: 50px; /* Espaciado interno */
+    background-color: black; /* Color de fondo del botón */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; /* Para alinear el icono y el texto horizontalmente */
+    align-items: center; /* Para centrar verticalmente el contenido */
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+}
+.button-buy-disabled {
+    padding: 10px; /* Espaciado interno */
+    background-color: rgb(127, 127, 127); /* Color de fondo del botón */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; /* Para alinear el icono y el texto horizontalmente */
+    align-items: center; /* Para centrar verticalmente el contenido */
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+}
+.button-buy:hover {
+    background-color: #00CFD9; /* Cambiar color de fondo al pasar el cursor */
+    color: black;
+}
+.text {
+    flex: 1; /* Para que el texto ocupe todo el espacio restante */
+    text-align: center; /* Para centrar el texto horizontalmente */
+}
+.accordion-button:not(.collapsed) {
+    background-color: #00CFD9;
+}
