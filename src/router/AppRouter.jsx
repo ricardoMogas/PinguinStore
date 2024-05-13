@@ -19,7 +19,6 @@ export const AppRouter = () => {
       </Route> */}
       <Route path="/order" element={<OrderPage />} />
       <Route path="/Adm" element={<Administrador />} />
-      <Route path="/Adm/ingrediente" element={<Ingredientes />} />
     </Routes>
   );
 };

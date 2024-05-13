@@ -1,5 +1,5 @@
 export default function NavBarComponent({ name, userId, shoppingItem, cartShoppingIcon, seeBarIcon }) {
-  console.log(userId);
+  // console.log('ID de usario:',userId);
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -8,10 +8,9 @@ export default function NavBarComponent({ name, userId, shoppingItem, cartShoppi
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => {
-    console.log(sidebarOpen);
+    // console.log(sidebarOpen);
     setSidebarOpen(!sidebarOpen);
   };
-
   useEffect(() => {
     setConcepts(shoppingItem);
   }, [shoppingItem]);
@@ -24,7 +23,7 @@ export default function NavBarComponent({ name, userId, shoppingItem, cartShoppi
     }
     orderItem.concepts = concepts;
     orderItem.userId = userId;
-    console.log(orderItem);
+    // console.log(orderItem);
     navigate("/order", {
       state: {
         order: orderItem,
@@ -39,15 +38,13 @@ export default function NavBarComponent({ name, userId, shoppingItem, cartShoppi
       ProductId: 0,
       name: "elemento1",
       import: 0,
-      quantity: 0,
-      personalizations: [],
+      quawntity: 0,
     },
     {
       ProductId: 1,
       name: "elemento2",
       import: 0,
       quantity: 0,
-      personalizations: [],
     }
   ]
   return (
@@ -103,7 +100,7 @@ export default function NavBarComponent({ name, userId, shoppingItem, cartShoppi
                     <Accordion.Item eventKey='0' >
                       <Accordion.Header>{elemento.name}</Accordion.Header>
                       <Accordion.Body>
-                        <p>Importe: {elemento.import}</p>
+                        <p>Importe: {elemento.price}</p>
                         <p>Cantidad: {elemento.quantity}</p>
                       </Accordion.Body>
                     </Accordion.Item>
@@ -144,4 +141,5 @@ import { useState, useEffect } from 'react';
 import Sidebar from "./Sidebar";
 
 import { Offcanvas, ListGroup, Accordion, Button, Badge } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';

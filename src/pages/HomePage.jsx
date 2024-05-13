@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 //import img from "../assets/LogoMarquesita.jpeg";
 import "font-awesome/css/font-awesome.min.css";
 import "../css/HomePage.css";
+import ProductsEndpoint from "../hook/ProductsEndpoint";
 import dummyData from "../data/dummyData.json";
 import NavBarComponent from "../components/NavBarComponent";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-import { Popover, OverlayTrigger, Button, Modal, Row, Col, Container, Spinner, ListGroup, Form } from "react-bootstrap";
+import { Button, Modal, Row, Col, Container, Spinner } from "react-bootstrap";
+const productObject = new ProductsEndpoint("http://127.0.0.1:5000");
 
 export const HomePage = () => {
   const [sonData, setSonData] = useState([]);
@@ -44,13 +46,18 @@ export const HomePage = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
-
   const esPar = currentItems.length % 3 === 0;
 
+  const fetchData = async () => {
+    setLoading(true);
+    const Result = await productObject.GetAllProducts();
+    console.log(Result.data);
+    setProduct(Result.data)
+    setLoading(false);
+  };
   useEffect(() => {
     // Simulación de la solicitud GET
-    setProduct(dummyData.data.products);
-    setLoading(false);
+    fetchData();
   }, []);
 
   //optengo por medio de useLocation el state que se manda usando navegate
@@ -68,7 +75,35 @@ export const HomePage = () => {
           </div>
         ) : (
           <div>
-            <h2 className="text-center p-4 mb-4">TOP CERCA DE TI ¡PIDE YA!</h2>
+            <h2 className="text-center p-4 mb-4">Tú tienda de tecnologia favorita</h2>
+            <Container>
+              <Row>
+                {currentItems.map((product, index) => (
+                  <Col key={index} sm={(esPar ? 4 : 5)}>
+                    <div className="container">
+                      <Button variant="" onClick={() => buttonKey(product)}>
+                        <div className="card m-3" style={{ width: "18rem" }}>
+                          <img src={`data:image/jpeg;base64,${product.image}`} className="card-img-top" alt="" />
+                          <div className="card-body">
+                            <h5 className="card-title">{product.name}</h5>
+                            <p>Descripción: <br /> {product.description}</p>
+                            <p>Proveedor: {product.nameSupplier}</p>
+                            <p>precio: {product.price}$</p>
+                            <p>Disponibles: {product.stock}</p>
+                          </div>
+                        </div>
+                      </Button>
+                    </div>
+                  </Col>
+                ))}
+                <MyVerticallyCenteredModal
+                  show={modalShow}
+                  onHide={handleClose}
+                  product={objeto}
+                  sendDataToDad={receiveDataChild} //evento con el que se recibe datos del hijo
+                />
+              </Row>
+            </Container>
             <Container className="center-container">
               <Row>
                 <Col></Col>
@@ -93,38 +128,12 @@ export const HomePage = () => {
                 </Col>
               </Row>
             </Container>
-            <Container>
-              <Row>
-                {currentItems.map((product, index) => (
-                  <Col key={index} sm={(esPar ? 4 : 5)}>
-                    <div className="container">
-                      <Button variant="" onClick={() => buttonKey(product)}>
-                        <div className="card m-3" style={{ width: "18rem" }}>
-                          <img src={product.pathImage} className="card-img-top" alt="" />
-                          <div className="card-body">
-                            <h5 className="card-title">{product.name}</h5>
-                            <p>Descripción: <br /> {product.description}</p>
-                            <p>precio: {product.price}$</p>
-                            <p>Disponibles: {product.stock}</p>
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </Col>
-                ))}
-                <MyVerticallyCenteredModal
-                  show={modalShow}
-                  onHide={handleClose}
-                  product={objeto}
-                  sendDataToDad={receiveDataChild} //evento con el que se recibe datos del hijo
-                />
-              </Row>
-            </Container>
           </div>
         )}
       </div>
+      
       <section className="footer">
-        <h4 className="copyrightText">©PALIYORK</h4>
+        <h4 className="copyrightText">©PinguStore</h4>
         <h4 className="copyrightText">Siguenos en nuestras redes sociales</h4>
         <ul className="sci">
           <a href="">
@@ -149,38 +158,29 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
   const location = useLocation();
   const userName = location.state.name;
   const userId = location.state.id;
-  console.log(userId)
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState([]);
-  const [checkList, setcheckList] = useState([]);
-
+  const [sentData, setSentData] = useState(null);
+  // Define un estado para el contador
+  const [count, setCount] = useState(1);
   const [Data, setData] = useState(
     {
       productId: 0,
       name: "",
-      import: 0,
+      price: 0,
       quantity: 0,
-      pathImage: "",
+      image: "",
       total: 0,
       extraTotal: 0,
-      personalizations: [],
     }
   );
+  const [extra, setExtra] = useState(0);
+  const valor = product.price;
+  const Total = (count * valor);
+  const TotalExtra = extra * count;
+  const TotalMas = Total + TotalExtra;
 
-  const handleCheckboxChange = (listId, price) => {
-    if (checked.includes(listId)) {
-      setChecked(checked.filter((id) => id !== listId));
-      console.log(checked);
-      setExtra(extra - price)
-    } else {
-      setChecked([...checked, listId]);
-      console.log(checked);
 
-      setExtra(extra + price);
-    }
-  };
-
-  const [sentData, setSentData] = useState(null);
   // Función para enviar el arreglo de datos cuando se presiona el botón
 
   const sendData = () => {
@@ -188,22 +188,20 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
     // Modifica el dato que deseas actualizar
     Data.productId = product.id
     Data.name = product.name
-    Data.import = product.price;
+    Data.price = product.price;
     Data.quantity = count;
     Data.total = TotalMas;
     const ingredients = checked.map((elemento) => {
       return { ingredientId: elemento };
     });
-    Data.personalizations = ingredients;
     Data.extraTotal = TotalExtra;
-    Data.pathImage = product.pathImage;
+    Data.image = product.image;
     setSentData(checked);
     sendDataToDad(Data); //envia los datos al padre
     console.log(checked);
     onHide(false);
   };
-  // Define un estado para el contador
-  const [count, setCount] = useState(1);
+
 
   // Función para incrementar el contador
   const increment = () => {
@@ -217,44 +215,16 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
       console.log(TotalMas);
     }
   };
-  const [extra, setExtra] = useState(0);
-  const valor = product.price;
-  const Total = (count * valor);
-  const TotalExtra = extra * count;
-  const TotalMas = Total + TotalExtra;
-
-  useEffect(() => {
-    //detecto cada ves que esta variable cambie se limpia la lista
-    if (onHide == "() => setModalShow(false)") {
-      setCount(1);
-      setChecked([]);
-    }
-    // Simulación de la solicitud GET
-    const dummyIngredients = [
-      { id: 1, name: "Ingrediente 1", price: 5, pathImage: "https://via.placeholder.com/150" },
-      { id: 2, name: "Ingrediente 2", price: 10, pathImage: "https://via.placeholder.com/150" },
-      { id: 3, name: "Ingrediente 3", price: 15, pathImage: "https://via.placeholder.com/150" }
-    ];
-    setcheckList(dummyIngredients);
-    setLoading(false);
-  }, [onHide]);
 
   const order = () => {
-    console.log(product);
-    console.log(checked);
-
     // Objeto Concepto
     Data.productId = product.id
     Data.name = product.name
-    Data.import = product.price;
+    Data.price = product.price;
     Data.quantity = count;
     Data.total = TotalMas;
-    const ingredients = checked.map((elemento) => {
-      return { ingredientId: elemento };
-    });
-    Data.personalizations = ingredients;
     Data.extraTotal = TotalExtra;
-    Data.pathImage = product.pathImage;
+    Data.image = product.image;
     //Objeto Final
     const orderItem = {
       userId: 0,
@@ -273,6 +243,8 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
     });
   }
 
+  useEffect(() => {
+  }, [onHide]);
   return (
     <Modal
       show={show}
@@ -290,7 +262,7 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
             <div className="p-2 m-3">
               <h2></h2>
               <img
-                src={product.pathImage}
+                src={`data:image/jpeg;base64,${product.image}`}
                 className="card-img-top"
                 alt=""
                 width={"150px"}
@@ -311,43 +283,12 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
             <div className="p-2 m-3 ">
               <h5>Descripcíon:</h5>
               <div className="overflow-auto" style={{ maxHeight: '200px' }}>
-                {/* 
-                {loading ?
-                  <Spinner animation="border" variant="dark" />
-                  :
-                  <ListGroup>
-                    {checkList.map((item) => (
-                      <OverlayTrigger
-                        key={item.id}
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={
-                          <Popover>
-                            <Popover.Header as="h3">Tú Ingrediente</Popover.Header>
-                            <Popover.Body>
-                              <img src={item.pathImage} className="card-img-top" alt="" />
-                            </Popover.Body>
-                          </Popover>
-                        }
-                      >
-                        <ListGroup.Item key={item.id}>
-                          <Form.Check
-                            type="checkbox"
-                            id={item.id}
-                            label={item.name}
-                            checked={checked.includes(item.id)}
-                            onChange={() => handleCheckboxChange(item.id, item.price)}
-                          />
-                        </ListGroup.Item>
-                      </OverlayTrigger>
-                    ))}
-                  </ListGroup>
-                }
-                */}
-              <p>
-                {product.description}
-              </p>
+                <p>
+                  {product.description}
+                </p>
               </div>
+              <h5>Proveedor</h5>
+              <p>{product.nameSupplier}</p>
               <div className="ContainerButton p-2 d-flex flex-column ">
                 <button
                   type="button"
@@ -371,3 +312,4 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
     </Modal>
   );
 }
+

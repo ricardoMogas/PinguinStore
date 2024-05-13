@@ -3,6 +3,7 @@ import "../css/Login.css";
 import img from "../assets/LogoTecnoPinguin.jpg";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "../hook/useForm";
+import SessionEndpoint from "../hook/SessionEndpoint";
 
 export const Login = () => {
   const { email, password, onInputChange, onResetForm } = useForm({
@@ -15,28 +16,28 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
-  function onLoginSuccess(dataJson) {
-    const { rol, userName, id, token } = dataJson.data;
-    if (rol === import.meta.env.VITE_REACT_APP_ROL_ADMINISTRADOR) {
-      navigate("/Adm");
-    } else if (rol === import.meta.env.VITE_REACT_APP_ROL_CLIENTE) {
-      navigate("/home", {
-        state: { name: userName, id, rol, token },
-      });
-      onResetForm();
-    }
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API;
-      console.log(baseApiUrl, email, password);
-      navigate("/home", {
-        state: { name: "userName", id: 123, rol: 2, token: "token"},
-      });
-    }, 2000);
+    console.log(email, password);
+    const result = await SessionEndpoint.Login(email, password)
+    if (result.status === false) {
+      alert('Correo o contraseña incorrecto');
+    } else {
+      console.log(result);
+      localStorage.setItem("id", result.id);
+      localStorage.setItem("rol", result.rol);
+      if (result.rol === 2) {
+        navigate("/adm", {
+          state: { name: result.name, id: result.id, rol: result.rol, token: "token"},
+        });
+      } else {
+        navigate("/home", {
+          state: { name: result.name, id: result.id, rol: result.rol, token: "token"},
+        });
+      }
+      setLoading(false);
+    }
     setLoading(false);
   }
 

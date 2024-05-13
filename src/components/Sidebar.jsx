@@ -1,5 +1,5 @@
 // Sidebar.jsx
-function Sidebar({ isOpen, toggleSidebar, name, id }) {
+function Sidebar({ isOpen, toggleSidebar, name }) {
   const [loading, setLoanding] = useState(true);
   const [items, setItems] = useState([
     { id: 1, text: 'Marquesitas' },
@@ -9,31 +9,26 @@ function Sidebar({ isOpen, toggleSidebar, name, id }) {
   ]);
   const [history, setHistory] = useState();
   const [lengthHistory, setLengthHistory] = useState(0);
+  const role = localStorage.getItem("rol");
+  const GetSalesCustomer = async () => {
+    const sales = await ProductObject.GetSalesCustomer(localStorage.getItem("id"));
+    setHistory(sales.data);
+    setLengthHistory(sales.data.length);
+  };
+
   useEffect(() => {
     // Realiza la solicitud GET cuando el componente se monta
     //setLoanding(true)
+    //console.log(role)
+    GetSalesCustomer();
+    console.log(history)
     const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API;
-    fetch(`${baseApiUrl}/customer/sales/${id}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('La solicitud no se pudo completar correctamente.');
-        }
-        return response.json();
-      })
-      .then((responseData) => {
-        setHistory(responseData.data);
-        setLengthHistory(responseData.data.length);
-        //setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error al realizar la solicitud GET:', error);
-        //setLoading(false);
-      });
+    console.log(baseApiUrl);
   }, []);
   return (
     <Offcanvas show={isOpen} onHide={toggleSidebar} placement="start" backdropClassName="custom-backdrop">
-      <Offcanvas.Header>
-        <Offcanvas.Title>
+      <Offcanvas.Header >
+        <Offcanvas.Title >
           <h1>Bienvenido {name}</h1>
           <div className='text-center'>
             <button
@@ -47,20 +42,34 @@ function Sidebar({ isOpen, toggleSidebar, name, id }) {
         </Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <h1>Historial</h1>
-        {lengthHistory > 0 ?
-          (
-          <div>
-            {history.map((elemento, index) => (
-              <div key={index}>{elemento.idSale}</div>
-            ))}
+        {role === "1" ? (
+          <div className='text-center'>
+            <h1>Historial</h1>
+            {lengthHistory > 0 ? (
+              <div>
+                {history.map((elemento, index) => (
+                  <Accordion defaultActiveKey='0' flush>
+                    <Accordion.Item eventKey='0' >
+                      <Accordion.Header>
+                        <h5>Id Compra: {elemento._id}</h5>
+                        <h4>Total: {elemento.total}$</h4>
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        {elemento.concepts.map((elemento, index) => (
+                          <p>Nombre: {elemento.product}</p>
+                        ))}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                ))}
+              </div>
+            ) : (
+              <p>No tiene compras hechas</p>
+            )}
           </div>
-          )
-          :
-          (
-            <p>No tiene compras hechas</p>
-          )}
-
+        ) : (
+          <h1>Opciones de administrador</h1>
+        )}
       </Offcanvas.Body>
     </Offcanvas>
   );
@@ -68,8 +77,10 @@ function Sidebar({ isOpen, toggleSidebar, name, id }) {
 
 export default Sidebar;
 import React from 'react';
-import { Offcanvas, ListGroup, Button, Row, Col, Container } from 'react-bootstrap';
+import { Offcanvas, ListGroup, Button, Row, Col, Accordion } from 'react-bootstrap';
 import '../css/Sidebar.css';
 import chevronRight from "../assets/chevron-right.svg"
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import ProductsEndpoint from '../hook/ProductsEndpoint';
+const ProductObject = new ProductsEndpoint(import.meta.env.VITE_REACT_APP_BASE_API);

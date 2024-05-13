@@ -1,11 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import img from "../assets/LogoMarquesita.jpeg";
+import img from "../assets/LogoTecnoPinguin.jpg";
 import "../css/Register.css";
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import SessionEndpoint from "../hook/SessionEndpoint";
+
 export const Register = () => {
   const [loading, setLoanding] = useState(true);
   const [show, setShow] = useState(false);
@@ -19,10 +21,14 @@ export const Register = () => {
 
   const onSubmit = async (data) => {
     setLoanding(false);
-    const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API;
-    console.log(data);
-    console.log(baseApiUrl);
+    const result = await SessionEndpoint.Register(data.name, data.email, data.password);
+    console.log(result);
     setLoanding(false);
+    if (result.status === true) {
+      setShow(true);
+    } else {
+      alert("Error al registrar");
+    }
   };
 
   //PARA EL BOTON INICIAR SESION
@@ -76,19 +82,23 @@ export const Register = () => {
                 })}
               />
             </div>
-            <div className="mb-3">
-              <input
-                type="number"
-                min="0"
-                className="form-control"
-                placeholder="Telefono"
-                {...register("telephone", {
-                  required: true,
-                  maxLength: 10,
-                })}
-              />
-              {errors.Telefono?.type === "maxLength" && <p>Campo Obligatorio</p>}
-            </div>
+
+            {/*
+              <div className="mb-3">
+                <input
+                  type="number"
+                  min="0"
+                  className="form-control"
+                  placeholder="Telefono"
+                  {...register("telephone", {
+                    required: true,
+                    maxLength: 10,
+                  })}
+                />
+                {errors.Telefono?.type === "maxLength" && <p>Campo Obligatorio</p>}
+              </div>
+            */}
+            
             <div className="mb-3">
               <input
                 type="email"

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/Administrador.css";
-import { NavbarAdm } from "../components/NavbarAdm";
+import NavBarComponent from "../components/NavBarComponent";
 import {
   Table,
   Button,
@@ -12,10 +11,13 @@ import {
   FormGroup,
   ModalFooter,
 } from "reactstrap";
+import ProductsEndpoint from "../hook/ProductsEndpoint";
+import { get } from "react-hook-form";
+const ProductObject = new ProductsEndpoint(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export const Administrador = () => {
   const url = import.meta.env.VITE_REACT_APP_BASE_API;
-  
+  const [supplier, setSupplier] = useState([]);
   const [dataState, setDataState] = useState({
     data: [],
     modalActualizar: false,
@@ -25,31 +27,12 @@ export const Administrador = () => {
       name: "",
       description: "",
       price: "",
-      available: "",
       stock: "",
-      pathImage: "",
+      image: "",
+      supplierId: ""
     },
   });
 
-  useEffect(() => {
-    // Realizar la solicitud GET para obtener los datos
-    fetch(`${url}/Products`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("La solicitud no se pudo completar correctamente.");
-        }
-        return response.json();
-      })
-      .then((responseData) => {
-        setDataState({
-          ...dataState,
-          data: responseData.data.products,
-        });
-      })
-      .catch((error) => {
-        console.error("Error al realizar la solicitud GET:", error);
-      });
-  }, []); // El segundo argumento [] indica que este efecto se ejecutará solo una vez al montar el componente
 
   const mostrarModalActualizar = (dato) => {
     setDataState({
@@ -66,7 +49,7 @@ export const Administrador = () => {
     });
   };
 
-  const mostrarModalInsertar = () => {
+  const showInsertModal = () => {
     setDataState({
       ...dataState,
       modalInsertar: true,
@@ -80,18 +63,31 @@ export const Administrador = () => {
     });
   };
 
-  const editar = (dato) => {
+  const fetchDataProduct = async () => {
+    const Result = await ProductObject.GetAllProducts();
+    //console.log(Result.data);
+    setDataProduct(Result.data)
+  };
+
+  const fetchSupplier = async () => {
+    const result = await ProductObject.GetSalesSuppliers();
+    //console.log(result);
+    if (result.status == true) {
+      setSupplier(result.data);
+    } else {
+      alert("Error al obtener los proveedores");
+    }
+  }
+
+  const editar = async (dato) => {
     const arreglo = [...dataState.data];
-    arreglo.forEach((registro, index) => {
-      if (dato.id === registro.id) {
-        arreglo[index].name = dato.name;
-        arreglo[index].description = dato.description;
-        arreglo[index].price = dato.price;
-        arreglo[index].available = dato.available;
-        arreglo[index].stock = dato.stock;
-        arreglo[index].pathImage = dato.pathImage;
-      }
-    });
+    const result = await ProductObject.UpdateProduct(dato);
+    if (result.status === true) {
+      alert("Producto actualizado correctamente");
+    } else {
+      alert("Error al actualizar el producto");
+    }
+    fetchDataProduct();
     setDataState({
       ...dataState,
       data: arreglo,
@@ -99,31 +95,39 @@ export const Administrador = () => {
     });
   };
 
-  const eliminar = (dato) => {
+  const eliminar = async (dato) => {
     const opcion = window.confirm(
-      `Estás Seguro que deseas Eliminar el elemento ${dato.id}`
+      `Estás Seguro que deseas Eliminar el elemento ${dato.name}`
     );
     if (opcion === true) {
-      const arreglo = [...dataState.data].filter(
-        (registro) => dato.id !== registro.id
-      );
+      const result = await ProductObject.DeleteProduct(dato.id);
+      console.log(result);
+      if (result.status === true) {
+        alert("Producto eliminado correctamente");
+      } else {
+        alert("Error al eliminar el producto");
+      }
+      fetchDataProduct();
       setDataState({
         ...dataState,
-        data: arreglo,
         modalActualizar: false,
       });
     }
   };
 
-  const insertar = () => {
-    const valorNuevo = { ...dataState.form };
-    valorNuevo.id = dataState.data.length + 1;
-    const lista = [...dataState.data];
-    lista.push(valorNuevo);
+  const insertar = async () => {
+    const newValue = { ...dataState.form };
+    console.log(newValue);
+    const Result = await ProductObject.RegisterProduct(newValue);
+    if (Result.status === true) {
+      alert("Producto insertado correctamente");
+    } else {
+      alert("Error al insertar el producto");
+    }
+    fetchDataProduct();
     setDataState({
       ...dataState,
       modalInsertar: false,
-      data: lista,
     });
   };
 
@@ -137,13 +141,31 @@ export const Administrador = () => {
     });
   };
 
+  const handleChangeSupplier = (e) => {
+    setDataState({
+      ...dataState,
+      form: {
+        ...dataState.form,
+        [e.target.supplierId]: e.target.value,
+      },
+    });
+    console.log(dataState.form);
+  };
+
+  useEffect(() => {
+    // Realizar la solicitud GET para obtener los datos
+    fetchSupplier();
+    fetchDataProduct();
+  }, []);
+
+  const [dataProduct, setDataProduct] = useState([]);
   return (
     <>
-      <NavbarAdm name={"nombre"} />
+      <NavBarComponent cartShoppingIcon={false} seeBarIcon={true} />
       <div className="yellow template justify-content-center align-items-center 100-w vh-100 ">
         <Container>
           <br />
-          <Button color="success" onClick={() => mostrarModalInsertar()}>
+          <Button color="success" onClick={() => showInsertModal()}>
             <i className="fa fa-plus"></i> Insertar
           </Button>
           <br />
@@ -154,6 +176,7 @@ export const Administrador = () => {
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
+                <th>Proveedor</th>
                 <th>Precio</th>
                 <th>Habilitado</th>
                 <th>Stock</th>
@@ -162,13 +185,14 @@ export const Administrador = () => {
               </tr>
             </thead>
             <tbody>
-              {dataState.data.map((dato) => (
+              {dataProduct.map((dato) => (
                 <tr key={dato.id}>
                   <td>{dato.id}</td>
                   <td>{dato.name}</td>
                   <td>{dato.description}</td>
+                  <td>{dato.nameSupplier}</td>
                   <td>{dato.price}</td>
-                  <td>{dato.available}</td>
+                  <td>{dato.stock === 0 ? "Sin Stock" : "Disponible"}</td>
                   <td>{dato.stock}</td>
                   <td>{dato.pathImage}</td>
                   <td>
@@ -187,6 +211,8 @@ export const Administrador = () => {
             </tbody>
           </Table>
         </Container>
+
+        {/**** MODAL ACTUALIZAR****/}
         <Modal isOpen={dataState.modalActualizar}>
           <ModalHeader>
             <div>
@@ -194,16 +220,6 @@ export const Administrador = () => {
             </div>
           </ModalHeader>
           <ModalBody>
-            <FormGroup>
-              <label>Id:</label>
-              <input
-                className="form-control"
-                readOnly
-                type="text"
-                value={dataState.form.id}
-              />
-            </FormGroup>
-
             <FormGroup>
               <label>Nombre:</label>
               <input
@@ -236,16 +252,6 @@ export const Administrador = () => {
               />
             </FormGroup>
             <FormGroup>
-              <label>Habilitado:</label>
-              <input
-                className="form-control"
-                name="available"
-                type="text"
-                onChange={handleChange}
-                value={dataState.form.available}
-              />
-            </FormGroup>
-            <FormGroup>
               <label>Cantidad:</label>
               <input
                 className="form-control"
@@ -262,105 +268,135 @@ export const Administrador = () => {
                 name="pathImage"
                 type="text"
                 onChange={handleChange}
-                value={dataState.form.pathImage}
-                />
-                </FormGroup>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" onClick={() => editar(dataState.form)}>
-                  Editar
-                </Button>
-                <Button color="danger" onClick={() => cerrarModalActualizar()}>
-                  Cancelar
-                </Button>
-              </ModalFooter>
-            </Modal>
-            <Modal isOpen={dataState.modalInsertar}>
-              <ModalHeader>
-                <div>
-                  <h3>Insertar Personaje</h3>
-                </div>
-              </ModalHeader>
-              <ModalBody>
-                <FormGroup>
-                  <label>Id:</label>
-                  <input
-                    className="form-control"
-                    readOnly
-                    type="text"
-                    value={dataState.data.length + 1}
-                  />
-                </FormGroup>
-    
-                <FormGroup>
-                  <label>Nombre:</label>
-                  <input
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-    
-                <FormGroup>
-                  <label>Descripcion:</label>
-                  <input
-                    className="form-control"
-                    name="description"
-                    type="text"
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Precio:</label>
-                  <input
-                    className="form-control"
-                    name="price"
-                    type="text"
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Habilitadad:</label>
-                  <input
-                    className="form-control"
-                    name="available"
-                    type="text"
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Cantidad:</label>
-                  <input
-                    className="form-control"
-                    name="stock"
-                    type="text"
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Imagen:</label>
-                  <input
-                    className="form-control"
-                    name="pathImage"
-                    type="text"
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" onClick={() => insertar()}>
-                  <i className="fa fa-floppy-disk"></i> Guardar
-                </Button>
-                <Button
-                  className="btn btn-danger"
-                  onClick={() => cerrarModalInsertar()}
-                >
-                  Cancelar
-                </Button>
-              </ModalFooter>
-            </Modal>
-          </div>
-        </>
-      );
-    };
+                value={dataState.form.image}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-label">Proveedor :</label>
+              <select
+                className="form-select"
+                name="Proveedor"
+                value={dataState.form.supplierId}
+              >
+                {supplier.map(opcion => (
+                  <option
+                    key={opcion.id}
+                    value={Option.id}
+                    onClick={() => {
+                      setDataState({
+                        ...dataState,
+                        form: {
+                          ...dataState.form,
+                          supplierId: opcion.id,
+                        },
+                      });
+                    }}
+                  >{opcion.name}</option>
+                ))}
+              </select>
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => editar(dataState.form)}>
+              Editar
+            </Button>
+            <Button color="danger" onClick={() => cerrarModalActualizar()}>
+              Cancelar
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/**** MODAL INSERTAR  ****/}
+        <Modal isOpen={dataState.modalInsertar}>
+          <ModalHeader>
+            <div>
+              <h3>Insertar Personaje</h3>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+
+            <FormGroup>
+              <label>Nombre:</label>
+              <input
+                className="form-control"
+                name="name"
+                type="text"
+                onChange={handleChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <label>Descripcion:</label>
+              <input
+                className="form-control"
+                name="description"
+                type="text"
+                onChange={handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>Precio:</label>
+              <input
+                className="form-control"
+                name="price"
+                type="text"
+                onChange={handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>Cantidad:</label>
+              <input
+                className="form-control"
+                name="stock"
+                type="text"
+                onChange={handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>Imagen:</label>
+              <input
+                className="form-control"
+                name="pathImage"
+                type="text"
+                onChange={handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-label">Proveedor :</label>
+              <select
+                className="form-select"
+                name="Proveedor"
+              >
+                {supplier.map(opcion => (
+                  <option
+                    key={opcion.id}
+                    value={Option.id}
+                    onClick={() => {
+                      setDataState({
+                        ...dataState,
+                        form: {
+                          ...dataState.form,
+                          supplierId: opcion.id,
+                        },
+                      });
+                    }}
+                  >{opcion.name}</option>
+                ))}
+              </select>
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => insertar()}>
+              <i className="fa fa-floppy-disk"></i> Guardar
+            </Button>
+            <Button
+              className="btn btn-danger"
+              onClick={() => cerrarModalInsertar()}
+            >
+              Cancelar
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+    </>
+  );
+};

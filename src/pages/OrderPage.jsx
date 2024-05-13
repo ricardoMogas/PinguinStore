@@ -4,6 +4,7 @@ import { Row, Col, Container, Card, Button, Modal, Spinner } from "react-bootstr
 import NavBarComponent from "../components/NavBarComponent";
 import "../css/OrderPage.css";
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 export const OrderPage = () => {
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +14,6 @@ export const OrderPage = () => {
     const userName = location.state.name;
     const concepts = location.state.order.concepts;
     const total = concepts.reduce((suma, objeto) => suma + objeto.total, 0);
-    const totalextra = concepts.reduce((suma, objeto) => suma + objeto.extraTotal, 0);
     const backToHome = () => {
         console.log(show);
         setShow(false)
@@ -29,31 +29,27 @@ export const OrderPage = () => {
         setIsLoading(true);
         // Realizar una solicitud HTTP para autenticar al usuario y obtener un token JWT
         const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API;
-        const response = await fetch(
-            `${baseApiUrl}/Sales`, //COMILLAS SIMPLES
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(location.state.order),
-            }
-        );
-        if (response.ok) {
-            const dataJson = await response.json();
-            console.log(dataJson);
-            setIsLoading(false);
-            // Manejar el token JWT, como guardarlo en el almacenamiento local o en el estado de la aplicación
-        } else {
-            const dataJson = await response.json();
-            setIsLoading(false);
-            window.alert(dataJson.title);
+        const dataResponse = {
+            userId: userId,
+            total: total,
+            concepts: concepts
         }
-        
+        try {
+            const response = await axios.post(`${baseApiUrl}/RegisterSales`, dataResponse);
+            const product = response.data;
+            console.log(product);
+        } catch (error) {
+            console.error('Error registering product:', error);
+            alert("error al pagar")
+            setIsLoading(false);
+        }
+        //console.log(location.state.order);
+        setIsLoading(false);
+
     }
     return (
         <>
-            <NavBarComponent name={"x"} cartShoppingIcon={false} seeBarIcon={false} userId={userId}/>
+            <NavBarComponent name={"x"} cartShoppingIcon={false} seeBarIcon={false} userId={userId} />
             <div className="Fondo template justify-content-center align-items-center 100-w vh-100">
                 <Button variant="dark" style={{ margin: '10px' }} onClick={() => backToHome()}>
                     Regresar
@@ -80,7 +76,7 @@ export const OrderPage = () => {
                                         {concepts.map((orderItem, index) => (
                                             <Col key={index} md={3}>
                                                 <Card>
-                                                    <Card.Img className='img-custom' src={orderItem.pathImage} alt={orderItem.name} />
+                                                    <Card.Img className='img-custom' src={`data:image/jpeg;base64,${orderItem.image}`} alt={orderItem.name} />
                                                     <Card.Body>
                                                         <Card.Title>{orderItem.name}</Card.Title>
                                                         <Card.Text>
@@ -110,9 +106,7 @@ export const OrderPage = () => {
                                             <h4>Producto: {elemento.name}</h4>
                                             Cantidad: {elemento.quantity}
                                             <br></br>
-                                            Costo Productos: {elemento.import}
-                                            <br></br>
-                                            Costo Extras: {elemento.extraTotal}
+                                            Costo Productos: {elemento.price}
                                             <br></br>
                                             Total Costo: {elemento.total}
                                         </div>
