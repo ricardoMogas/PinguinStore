@@ -49,7 +49,7 @@ export default function NavBarComponent({ name, userId, shoppingItem, cartShoppi
   ]
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-black">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
         {seeBarIcon ? (
           <div className="navbar-brand">
             <button type="button" className="btn btn-black" onClick={toggleSidebar}>

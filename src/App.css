@@ -3,6 +3,7 @@
 body{
     font-family: 'Archivo Narrow', sans-serif;
     background-color: #00CFD9;
+    padding-top: 90px;
 }
 
 @font-face {

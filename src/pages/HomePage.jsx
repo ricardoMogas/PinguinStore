@@ -8,7 +8,7 @@ import NavBarComponent from "../components/NavBarComponent";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, Row, Col, Container, Spinner } from "react-bootstrap";
-const productObject = new ProductsEndpoint("http://127.0.0.1:5000");
+const productObject = new ProductsEndpoint(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export const HomePage = () => {
   const [sonData, setSonData] = useState([]);
@@ -200,6 +200,7 @@ function MyVerticallyCenteredModal({ show, onHide, product, sendDataToDad }) {
     sendDataToDad(Data); //envia los datos al padre
     console.log(checked);
     onHide(false);
+    setCount(1)
   };
 
 

@@ -68,7 +68,7 @@ function Sidebar({ isOpen, toggleSidebar, name }) {
             )}
           </div>
         ) : (
-          <h1>Opciones de administrador</h1>
+          <h1>CRUDS</h1>
         )}
       </Offcanvas.Body>
     </Offcanvas>

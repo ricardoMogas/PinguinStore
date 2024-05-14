@@ -3,7 +3,6 @@ import { LoginPage } from "../pages/LoginPage";
 import { HomePage } from "../pages/HomePage";
 import { Register } from "../components/Register";
 import { Administrador } from "../pages/Administrador";
-import { Ingredientes } from "../components/Ingredientes";
 import { OrderPage } from "../pages/OrderPage";
 
 export const AppRouter = () => {

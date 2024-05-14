@@ -55,7 +55,7 @@ class ProductsEndpoint {
         }
     }
 
-    async GetSalesSuppliers() {
+    async GetSuppliers() {
         try {
             const response = await axios.get(`${this.apiUrl}/GetAllSuppliers`);
             const Suppliers = response.data;
